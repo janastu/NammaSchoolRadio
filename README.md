@@ -2,7 +2,7 @@
 
 A DIY internet radio station that provides a platform for school-going children to truly ***express*** themselves.
 
-It comprises of Raspberry-Pi devices that function as
+The technological backbone comprises of Raspberry-Pis that can be classified as
 1. StudioPi
 2. Portable Recorder Pi
 
