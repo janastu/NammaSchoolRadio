@@ -1,0 +1,32 @@
+*** connect to internet ***
+copy python_script folder to /home/pi/Documents/
+
+open terminal
+	nano /home/pi/.config/lxsession/LXDE-pi/autostart
+	(add following line to /home/pi/.config/lxsession/LXDE-pi/autostart)
+		@python /home/pi/Documents/python_script/lappi.py
+
+	cd /home/pi/Documents/python_script/
+	chmod +x gdrive-linux-rpi
+	./gdrive-linux-rpi about
+	(copy the URL and go to browser and open the URL,
+	 sign in to desired google account
+	 copy the verification code
+	 paste it in the terminal)
+
+	(check if picketpi directory exists)	
+		./gdrive-linux-rpi list -m 100 | grep dir
+	(else make directory)
+		./gdrive-linux-rpi mkdir pocketpi
+	
+	(get the folder id)
+		./gdrive-linux-rpi list -m 100 | grep dir
+	(paste the folder id in lappi.py file in the following line after '--parent')
+		os.system(projectpath+"/gdrive-linux-rpi upload --delete --parent 142rfPJUXY_X2gHt0RYXENQEPgHN72hi_ "+recordingpath+"/"+i)
+
+	sudo apt-get install lame	
+	sudo apt-get install sshpass
+
+*** connect to local network ***
+	ssh pi@192.168.1.50
+	(enter password)
