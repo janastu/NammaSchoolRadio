@@ -142,6 +142,7 @@ while True:
                 longpress = True
                 break
 		# if longpress is True, record audio after a 'beep'
+	if time.time() - previousTime < 0.1: continue
 	time.sleep(0.5)
 	if longpress:
             led1.on()
@@ -181,9 +182,59 @@ while True:
                 longpress = True
                 break
    	# if longpress is True, record audio after a 'beep'
-   	led2.on()
+	if time.time() - previousTime < 0.1: continue
 	time.sleep(0.5)
 	nammaradio = is_onradio() and is_connected(local_server)
+	if longpress:
+            led2.on()
+            os.system("pkill -9 aplay")
+            upfiles=os.listdir(recordingpath)
+            if not upfiles:
+                print "no new file to upload !!!"
+                aplay("NothingToUpload.wav")
+            else:
+                if is_onradio() and is_connected(local_server):
+                    print "uploading to local server"
+                    for i in upfiles:
+                        aplay("sUploading.wav")
+                        #os.system("sshpass -p 'raspberry' scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "+recordingpath+"/"+i+" pi@"+local_server+":/home/pi/Documents")
+                        os.system("sshpass -p 'raspberry' rsync "+recordingpath+"/"+i+" pi@"+local_server+":/home/pi/Documents/pock1/")
+                        os.system("rm "+recordingpath+"/"+i)
+                    print "upload success !!!"
+                    aplay("Uploaded.wav")
+                elif is_connected(remote_server):
+                    for i in upfiles:
+                        aplay("gUploading.wav")
+                        os.system(projectpath+"/gdrive-linux-rpi upload --delete --parent 142rfPJUXY_X2gHt0RYXENQEPgHN72hi_ "+recordingpath+"/"+i)
+                    print "upload success !!!"
+                    aplay("Uploaded.wav")
+                else:
+                    print "No internet"
+                    aplay("Nointernet.wav")
+            led2.off()
+            longpress = False
+        else:
+            led2.on()
+            if nammaschoolradio:
+                os.system("pkill -9 aplay")
+                nammaschoolradio = False
+                if is_onradio() and is_connected(local_server):
+                    os.system("chromium-browser --app=http://"+local_server+" &")
+                    print "starting namma school radio...."
+                    aplay("radiostart.wav")
+                elif is_connected(remote_server):
+                    os.system("chromium-browser --app=http://www.nammaschoolradio.com/home &")
+                    print "starting namma school radio...."
+                    aplay("radiostart.wav")
+                else:
+                    print "No internet"
+                    aplay("Nointernet.wav")
+            else:
+                nammaschoolradio = True
+                print "echo closing radio !!!"
+                os.system("killall chromium-browser")
+            led2.off()
+        """    
         if (is_connected(remote_server)) or nammaradio:
             if longpress:
                 led2.on()
@@ -230,4 +281,4 @@ while True:
             print "No internet"
             aplay("Nointernet.wav")
 	led2.off()	    
-		    
+	"""	    
