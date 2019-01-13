@@ -26,9 +26,9 @@ def is_connected(network):
 def is_onradio():
     try:
         test = "Namdu1Radio" in check_output("iwgetid", universal_newlines=True)
-	    return test
+	return test
     except:
-	    return False
+	return False
 
 # macro for playing audio instructions - to keep the code simple
 def aplay(filename):
